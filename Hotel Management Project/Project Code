@@ -1,0 +1,1563 @@
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.sql.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+
+
+public class Login extends JFrame implements ActionListener {
+
+    JLabel l1, l2;
+    JTextField t1;
+    JPasswordField t2;
+    JButton b1, b2;
+    String user = "admin";
+    String password = "password";
+
+    public Login() {
+        super("Login");
+
+        setLayout(null);
+
+        l1 = new JLabel("Username");
+        l1.setBounds(40, 20, 100, 30);
+        add(l1);
+
+        l2 = new JLabel("Password");
+        l2.setBounds(40, 70, 100, 30);
+        add(l2);
+
+        t1 = new JTextField();
+        t1.setBounds(150, 20, 150, 30);
+        add(t1);
+
+        t2 = new JPasswordField();
+        t2.setBounds(150, 70, 150, 30);
+        add(t2);
+
+        b1 = new JButton("Login");
+        b1.setBounds(40, 140, 120, 30);
+        b1.setFont(new Font("serif", Font.BOLD, 15));
+        b1.addActionListener(this);
+        b1.setBackground(Color.BLACK);
+        b1.setForeground(Color.WHITE);
+        add(b1);
+
+        b2 = new JButton("Cancel");
+        b2.setBounds(180, 140, 120, 30);
+        b2.setFont(new Font("serif", Font.BOLD, 15));
+        b2.setBackground(Color.BLACK);
+        b2.setForeground(Color.WHITE);
+        add(b2);
+
+        b2.addActionListener(this);
+
+        getContentPane().setBackground(Color.WHITE);
+
+        setVisible(true);
+        setSize(600, 300);
+        setLocation(600, 350);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    }
+
+    public void actionPerformed(ActionEvent ae) {
+        if (ae.getSource() == b1) {
+            String u = t1.getText();
+            String v = new String(t2.getPassword()); // Get password as a String
+
+            if (u.equals(user) && v.equals(password)) {
+                new Dashboard().setVisible(true);
+                JOptionPane.showMessageDialog(this, "Login successful", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Login failed", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else if (ae.getSource() == b2) {
+            System.exit(0); // Close the program when Cancel button is clicked
+        }
+    }
+
+    public static void main(String[] arg) {
+        new Login();
+    }
+}
+
+class Dashboard extends JFrame implements ActionListener {
+    public Dashboard() {
+        super("HOTEL MANAGEMENT SYSTEM");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        setForeground(Color.RED);
+        setLayout(null);
+
+        ImageIcon imageIcon = new ImageIcon("C:\\Users\\ASUS\\.vscode\\cli\\jdbc\\src\\hotel1.jpeg"); // Assuming the image is in the project directory
+        Image image = imageIcon.getImage().getScaledInstance(1300, 1000, Image.SCALE_DEFAULT);
+        ImageIcon scaledIcon = new ImageIcon(image);
+
+        // Create and add the JLabel with the image
+        JLabel imageLabel = new JLabel(scaledIcon);
+        imageLabel.setBounds(0, 0, 1950, 1000);
+        add(imageLabel);
+
+
+        
+        
+
+        JLabel AirlineManagementSystem = new JLabel("WELCOME...");
+        AirlineManagementSystem.setForeground(Color.BLACK);
+        AirlineManagementSystem.setFont(new Font("Tahoma", Font.PLAIN, 46));
+        AirlineManagementSystem.setBounds(700, 120, 1000, 85);
+        imageLabel.add(AirlineManagementSystem);
+
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+
+        JMenu AirlineSystem = new JMenu("HOTEL MANAGEMENT");
+        AirlineSystem.setForeground(Color.BLUE);
+        menuBar.add(AirlineSystem);
+
+        JMenuItem Reception = new JMenuItem("RECEPTION");
+        Reception.addActionListener(this);
+        AirlineSystem.add(Reception);
+
+        setSize(1950, 1090);
+        setVisible(true);
+        getContentPane().setBackground(Color.WHITE);
+    }
+
+    public void actionPerformed(ActionEvent ae) {
+        if (ae.getActionCommand().equals("RECEPTION")) {
+            new Reception().setVisible(true);
+            this.setVisible(false);
+        }
+    }
+}
+
+
+ 
+ class AddEmployee extends JFrame { // Third Frame
+
+    Connection conn; // Declare connection at the class level
+    
+
+    public void conn() {  
+        try {  
+            Class.forName("com.mysql.jdbc.Driver");  
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Hotel_DB", "root", "d1e2v3a4"); 
+            Statement s = conn.createStatement();
+            System.out.println("connected");
+        } catch (Exception e) { 
+            System.out.println(e);
+        }  
+    }  
+    
+
+    JTextField textField, textField_1, textField_2, textField_3, textField_4, textField_5, textField_6;
+
+    public AddEmployee() {
+
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e){
+
+                new Dashboard().setVisible(true);;
+            }
+        });
+        getContentPane().setForeground(Color.BLUE);
+        getContentPane().setBackground(Color.WHITE);
+        setTitle("ADD EMPLOYEE DETAILS");
+
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        setSize(778, 486);
+        getContentPane().setLayout(null);
+
+        JLabel name = new JLabel("NAME");
+        name.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        name.setBounds(60, 30, 150, 27);
+        add(name);
+
+        textField = new JTextField();
+        textField.setBounds(200, 30, 150, 27);
+        add(textField);
+
+        JButton Next = new JButton("SAVE");
+        Next.setBounds(100, 420, 150, 30);
+        Next.setBackground(Color.BLACK);
+        Next.setForeground(Color.WHITE);
+        add(Next);
+
+        JButton Delete = new JButton("DELETE");
+        Delete.setBounds(350, 420, 150, 30);
+        Delete.setBackground(Color.BLACK);
+        Delete.setForeground(Color.WHITE);
+        add(Delete);
+
+        JButton Display = new JButton("DISPLAY");
+        Display.setBounds(600, 420, 150, 30);
+        Display.setBackground(Color.BLACK);
+        Display.setForeground(Color.WHITE);
+        add(Display);
+
+        JButton Search = new JButton("SEARCH EID");
+        Search.setBounds(600, 460, 150, 30);
+        Search.setBackground(Color.BLACK);
+        Search.setForeground(Color.WHITE);
+        add(Search);
+
+        JLabel EID = new JLabel("EID");
+        EID.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        EID.setBounds(60, 80, 150, 27);
+        add(EID);
+
+        textField_1 = new JTextField();
+        textField_1.setBounds(200, 80, 150, 27);
+        add(textField_1);
+
+        JLabel Designation = new JLabel("Designation");
+        Designation.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        Designation.setBounds(60, 140, 150, 27);
+        add(Designation);
+
+        textField_2 = new JTextField();
+        textField_2.setBounds(200, 140, 150, 27);
+        add(textField_2);
+
+        JLabel DOB = new JLabel("DOB");
+        DOB.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        DOB.setBounds(60, 220, 150, 27);
+        add(DOB);
+
+        textField_3 = new JTextField();
+        textField_3.setBounds(200, 220, 150, 27);
+        add(textField_3);
+
+        setVisible(true);
+        JLabel AddPassengers = new JLabel("ADD EMPLOYEE DETAILS");
+        AddPassengers.setForeground(Color.BLUE);
+        AddPassengers.setFont(new Font("Tahoma", Font.PLAIN, 31));
+        AddPassengers.setBounds(450, 24, 442, 35);
+        add(AddPassengers);
+
+        Next.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                String name = textField.getText();
+                String EID = textField_1.getText();
+                String Designation = textField_2.getText();
+                String DOB = textField_3.getText();
+
+                try {
+                    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel_db", "root", "d1e2v3a4");
+                    Statement s = conn.createStatement();
+                    String str = "INSERT INTO employee values( '" + name + "', '" + EID + "', '" + Designation + "','" + DOB + "')";
+
+                    s.executeUpdate(str);
+                    JOptionPane.showMessageDialog(AddEmployee.this, "Employee Added");
+                    //setVisible(false);
+                    //AddEmployee emp = new AddEmployee();
+				//emp.setVisible(true);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        Delete.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                String EID = textField_1.getText();
+
+                try {
+                    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel_db", "root", "d1e2v3a4");
+                    Statement s = conn.createStatement();
+                    String str = "DELETE from employee where EID='" + EID + "'";
+
+                    s.executeUpdate(str);
+                    JOptionPane.showMessageDialog(AddEmployee.this, "Employee Deleted");
+                   // setVisible(false);
+                   // AddEmployee emp = new AddEmployee();
+				//emp.setVisible(true);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        Display.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                try {
+                    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel_db", "root", "d1e2v3a4");
+                    Statement s = conn.createStatement();
+                    ResultSet rs = s.executeQuery("SELECT * FROM EMPLOYEE");
+
+                    // Create a DefaultTableModel to hold your data
+                    DefaultTableModel model = new DefaultTableModel();
+                    model.addColumn("Name");
+                    model.addColumn("EID");
+                    model.addColumn("Designation");
+                    model.addColumn("DOB");
+
+                    // Populate the model with data from the ResultSet
+                    while (rs.next()) {
+                        Object[] row = {
+                            rs.getString(1),
+                            rs.getString(2),
+                            rs.getString(3),
+                            rs.getString(4)
+                        };
+                        model.addRow(row);
+                    }
+
+                    // Create a JTable with the model
+                    JTable table = new JTable(model);
+
+                    // Wrap the table in a scroll pane
+                    JScrollPane scrollPane = new JScrollPane(table);
+
+                    // Create a JFrame to hold the scroll pane
+                    JFrame frame = new JFrame("Employee Details");
+                    frame.add(scrollPane);
+                    frame.pack();
+                    frame.setVisible(true);
+
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(AddEmployee.this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        Search.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                try {
+
+
+                    String EID = textField_1.getText();
+
+                    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel_db", "root", "d1e2v3a4");
+                    Statement s = conn.createStatement();
+                    ResultSet rs = s.executeQuery("SELECT * FROM EMPLOYEE where EID = '"+EID+"'");
+
+                    // Create a DefaultTableModel to hold your data
+                    DefaultTableModel model = new DefaultTableModel();
+                    model.addColumn("Name");
+                    model.addColumn("EID");
+                    model.addColumn("Designation");
+                    model.addColumn("DOB");
+
+                    // Populate the model with data from the ResultSet
+                    while (rs.next()) {
+                        Object[] row = {
+                            rs.getString(1),
+                            rs.getString(2),
+                            rs.getString(3),
+                            rs.getString(4)
+                        };
+                        model.addRow(row);
+                    }
+
+                    // Create a JTable with the model
+                    JTable table = new JTable(model);
+
+                    // Wrap the table in a scroll pane
+                    JScrollPane scrollPane = new JScrollPane(table);
+
+                    // Create a JFrame to hold the scroll pane
+                    JFrame frame = new JFrame("Employee Details");
+                    frame.add(scrollPane);
+                    frame.pack();
+                    frame.setVisible(true);
+
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(AddEmployee.this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        setSize(900, 600);
+        setVisible(true);
+        setLocation(530, 200);
+
+    }
+    
+    }
+
+    
+    
+  
+        
+    class chk_in_out extends JFrame{ //Third Frame
+
+        Connection conn; // Declare connection at the class level
+        Statement s;
+    public void conn() {  
+        try {  
+            Class.forName("com.mysql.jdbc.Driver");  
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Hotel_DB", "root", "d1e2v3a4"); 
+            System.out.println("connected");
+        } catch (Exception e) { 
+            System.out.println(e);
+        }  
+    }  
+        
+        JTextField textField,textField_1,textField_2,textField_3,textField_4,textField_5,textField_6;
+           
+            public chk_in_out(){
+
+                setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e){
+
+                new Dashboard().setVisible(true);;
+            }
+        });
+                getContentPane().setForeground(Color.BLUE);
+                getContentPane().setBackground(Color.WHITE);
+                setTitle("CHECK IN CHECK OUT DETAILS");
+             
+                setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                setSize(778,486);
+                getContentPane().setLayout(null);
+                
+                JLabel roomno = new JLabel("ROOM_NO");
+                roomno.setFont(new Font("Tahoma", Font.PLAIN, 17));
+                roomno.setBounds(60, 30, 150, 27);
+                add(roomno);
+                setVisible(true);
+                
+                textField = new JTextField();
+                textField.setBounds(200, 30, 150, 27);
+                add(textField);
+                
+                JButton Next = new JButton("SAVE");
+                Next.setBounds(100, 420, 150, 30);
+                Next.setBackground(Color.BLACK);
+                Next.setForeground(Color.WHITE);
+                add(Next);
+    
+                JButton Delete = new JButton("DELETE");
+                Delete.setBounds( 350, 420, 150, 30);
+                Delete.setBackground(Color.BLACK);
+                Delete.setForeground(Color.WHITE);
+                add(Delete);
+                
+                JButton Display = new JButton("DISPLAY ALL");
+                Display.setBounds( 600, 420, 150, 30);
+                Display.setBackground(Color.BLACK);
+                Display.setForeground(Color.WHITE);
+                add(Display);
+
+                JButton Search = new JButton("BILL");
+                Search.setBounds( 600, 460, 150, 30);
+                Search.setBackground(Color.BLACK);
+                Search.setForeground(Color.WHITE);
+                add(Search);
+    
+                JLabel CID = new JLabel("CID");
+                CID.setFont(new Font("Tahoma", Font.PLAIN, 17));
+               CID.setBounds(60, 80, 150, 27);
+                add(CID);
+                
+                textField_1 = new JTextField();
+                textField_1.setBounds(200, 80, 150, 27);
+                add(textField_1);
+                
+                JLabel cid = new JLabel("CheckInDate");
+                cid.setFont(new Font("Tahoma", Font.PLAIN, 17));
+                cid.setBounds(60, 140, 150, 27);
+                add(cid);
+    
+                textField_2 = new JTextField();
+                textField_2.setBounds(200, 140, 150, 27);
+                add(textField_2);
+    
+                //JLabel cod = new JLabel("CheckOutDate");
+               // cod.setFont(new Font("Tahoma", Font.PLAIN, 17));
+            // cod.setBounds(60, 220, 150, 27);
+             //  add(cod);
+                
+                // textField_3 = new JTextField();
+                // textField_3.setBounds(200, 220, 150, 27);
+                // add(textField_3);
+    
+                JLabel nod = new JLabel("No Of days");
+                nod.setFont(new Font("Tahoma", Font.PLAIN, 17));
+                nod.setBounds(60, 250, 150, 27);
+                add(nod);
+    
+                textField_4 = new JTextField();
+                textField_4.setBounds(200, 250, 150, 27);
+                add(textField_4);
+        
+                setVisible(true);
+                JLabel Addcheck = new JLabel("ADD CHECKIN DETAILS");
+                Addcheck.setForeground(Color.BLUE);
+                Addcheck.setFont(new Font("Tahoma", Font.PLAIN, 31));
+                Addcheck.setBounds(450, 24, 442, 35);
+                add(Addcheck);
+                
+         
+    
+                
+                Next.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent ae) {
+                        String roomno = textField.getText();
+                        String CID = textField_1.getText();
+                        String cid = textField_2.getText();
+                        String nod = textField_4.getText();
+        
+                        try {
+                            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Hotel_DB", "root", "d1e2v3a4");
+        
+                            // Use prepared statement to prevent SQL injection
+                            PreparedStatement ps = conn.prepareStatement("SELECT price FROM room WHERE room_no=?");
+                            ps.setString(1, roomno);
+        
+                            ResultSet rs = ps.executeQuery();
+        
+                            // Check if ResultSet has any rows
+                            if (rs.next()) {
+                                int price = rs.getInt("price");
+                                int total = price * Integer.parseInt(nod);
+        
+                                // Calculate the checkout date by adding number of days to check-in date
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                Date checkInDate = sdf.parse(cid);
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.setTime(checkInDate);
+                                calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(nod));
+                                Date checkOutDate = calendar.getTime();
+                                String cod = sdf.format(checkOutDate);
+        
+                                // Use prepared statement to prevent SQL injection
+                                PreparedStatement psInsert = conn.prepareStatement("INSERT INTO CheckIN_CheckOUT VALUES (?, ?, ?, ?, ?, ?)");
+                                psInsert.setString(1, roomno);
+                                psInsert.setString(2, CID);
+                                psInsert.setString(3, cid);
+                                psInsert.setString(4, cod); // Set the calculated checkout date
+                                psInsert.setString(5, nod);
+                                psInsert.setInt(6, total);
+        
+                                // Execute the insert statement
+                                psInsert.executeUpdate();
+        
+                                JOptionPane.showMessageDialog(null, "Value Added");
+
+                                //chk_in_out chk = new chk_in_out();
+					            //chk.setVisible(true);
+                                //setVisible(false); // Assuming you want to hide the window after adding the value
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Room not found", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } catch (SQLException | NumberFormatException | java.text.ParseException e) {
+                            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                
+    
+                Delete.addActionListener(new ActionListener(){
+                    public void actionPerformed(ActionEvent ae){
+                        //String roomno = textField.getText();
+                        String CID = textField_1.getText();
+                       // String cid = textField_2.getText();
+                       // String cod = textField_3.getText();
+                       // String nod = textField_4.getText();
+                        
+    
+                        try {
+                            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Hotel_DB", "root", "d1e2v3a4");
+                            Statement s = conn.createStatement();
+                            String str = "DELETE from CheckIN_CheckOUT where CID='"+CID+"'";
+                            
+                        s.executeUpdate(str);
+                            JOptionPane.showMessageDialog(chk_in_out.this,"ENTRY Deleted");
+                            //setVisible(false);
+                            
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                    }
+            }
+                });
+    
+                Display.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent ae) {
+                        try {
+                            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Hotel_DB", "root", "d1e2v3a4");
+                            Statement stmt = conn.createStatement();
+                            ResultSet rs = stmt.executeQuery("SELECT * FROM checkin_checkout");
+        
+                            // Create a DefaultTableModel to hold your data
+                            DefaultTableModel model = new DefaultTableModel();
+                            model.addColumn("Room No");
+                            model.addColumn("CID");
+                            model.addColumn("Check-in Date");
+                            model.addColumn("Check-out Date");
+                            model.addColumn("No of Days");
+                            model.addColumn("Total Price");
+        
+                            // Populate the model with data from the ResultSet
+                            while (rs.next()) {
+                                Object[] row = {
+                                    rs.getString(1),
+                                    rs.getString(2),
+                                    rs.getString(3),
+                                    rs.getString(4),
+                                    rs.getString(5),
+                                    rs.getString(6)
+                                };
+                                model.addRow(row);
+                            }
+        
+                            // Create a JTable with the model
+                            JTable table = new JTable(model);
+        
+                            // Wrap the table in a scroll pane
+                            JScrollPane scrollPane = new JScrollPane(table);
+        
+                            // Create a JFrame to hold the scroll pane
+                            JFrame frame = new JFrame("Check-in/Check-out Details");
+                            frame.add(scrollPane);
+                            frame.pack();
+                            frame.setVisible(true);
+        
+                        } catch (SQLException e) {
+                            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                });
+                
+                Search.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent ae) {
+                        try {
+                            String CID = textField_1.getText();
+
+                            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Hotel_DB", "root", "d1e2v3a4");
+                            Statement stmt = conn.createStatement();
+                            ResultSet rs = stmt.executeQuery("SELECT * FROM checkin_checkout where CID = '"+CID+"'");
+        
+                            // Create a DefaultTableModel to hold your data
+                            DefaultTableModel model = new DefaultTableModel();
+                            model.addColumn("Room No");
+                            model.addColumn("CID");
+                            model.addColumn("Check-in Date");
+                            model.addColumn("Check-out Date");
+                            model.addColumn("No of Days");
+                            model.addColumn("Total Price");
+        
+                            // Populate the model with data from the ResultSet
+                            while (rs.next()) {
+                                Object[] row = {
+                                    rs.getString(1),
+                                    rs.getString(2),
+                                    rs.getString(3),
+                                    rs.getString(4),
+                                    rs.getString(5),
+                                    rs.getString(6)
+                                };
+                                model.addRow(row);
+                            }
+        
+                            // Create a JTable with the model
+                            JTable table = new JTable(model);
+        
+                            // Wrap the table in a scroll pane
+                            JScrollPane scrollPane = new JScrollPane(table);
+        
+                            // Create a JFrame to hold the scroll pane
+                            JFrame frame = new JFrame("BILL");
+                            frame.add(scrollPane);
+                            frame.pack();
+                            frame.setVisible(true);
+        
+                        } catch (SQLException e) {
+                            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                });
+
+                setSize(900,600);
+                setVisible(true);
+                setLocation(530,200);
+                
+        }
+        
+    } 
+     
+
+
+    
+    class Customer extends JFrame implements ActionListener {
+    
+        JLabel l1, l2, l3, l4, l5;
+        JTextField t1, t2, t3, t4, t5;
+        JButton b1, b2, b3, b4;
+        Connection conn;
+    
+        public Customer() {
+            super("Customer");
+    
+            setLayout(null);
+
+            setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e){
+
+                new Dashboard().setVisible(true);;
+            }
+        });
+    
+            l1 = new JLabel("Customer id");
+            l1.setBounds(40, 20, 100, 30);
+            add(l1);
+    
+            l2 = new JLabel("Name");
+            l2.setBounds(40, 70, 100, 30);
+            add(l2);
+            
+            l3 = new JLabel("Date of Birth");
+            l3.setBounds(40, 120, 100, 30);
+            add(l3);
+            
+            l4 = new JLabel("Room no.");
+            l4.setBounds(40, 170, 100, 30);
+            add(l4);
+            
+            l5 = new JLabel("Phone no.");
+            l5.setBounds(40, 220, 100, 30);
+            add(l5);
+    
+            t1 = new JTextField();
+            t1.setBounds(150, 20, 150, 30);
+            add(t1);
+    
+            t2 = new JTextField();
+            t2.setBounds(150, 70, 150, 30);
+            add(t2);
+            
+            t3 = new JTextField();
+            t3.setBounds(150, 120, 150, 30);
+            add(t3);
+    
+            t4 = new JTextField();
+            t4.setBounds(150, 170, 150, 30);
+            add(t4);
+            
+            t5 = new JTextField();
+            t5.setBounds(150, 220, 150, 30);
+            add(t5);
+    
+    
+            b1 = new JButton("insert");
+            b1.setBounds(40, 300, 120, 30);
+            b1.setFont(new Font("serif", Font.BOLD, 15));
+            b1.addActionListener(this);
+            b1.setBackground(Color.BLACK);
+            b1.setForeground(Color.WHITE);
+            add(b1);
+    
+            b2 = new JButton("delete");
+            b2.setBounds(180, 300, 120, 30);
+            b2.setFont(new Font("serif", Font.BOLD, 15));
+            b2.setBackground(Color.BLACK);
+            b2.setForeground(Color.WHITE);
+            add(b2);
+            b2.addActionListener(this);
+            
+            b3 = new JButton("display");
+            b3.setBounds(320, 300, 120, 30);
+            b3.setFont(new Font("serif", Font.BOLD, 15));
+            b3.addActionListener(this);
+            b3.setBackground(Color.BLACK);
+            b3.setForeground(Color.WHITE);
+            add(b3);
+            
+            b4 = new JButton("list of room available");
+            b4.setBounds(460, 300, 300, 30);
+            b4.setFont(new Font("serif", Font.BOLD, 15));
+            b4.addActionListener(this);
+            b4.setBackground(Color.BLACK);
+            b4.setForeground(Color.WHITE);
+            add(b4);
+    
+            getContentPane().setBackground(Color.WHITE);
+    
+            setVisible(true);
+            setSize(800, 400);
+            setLocation(400, 200);
+    
+            // Connect to the database
+            try {
+                conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Hotel_DB", "root", "d1e2v3a4");
+            } catch (SQLException e) {
+                System.out.println("Failed to connect to the database.");
+                e.printStackTrace();
+            }
+        }
+    
+        public void actionPerformed(ActionEvent ae) {
+            if (ae.getSource() == b1) {
+                insertCustomer();
+            } else if (ae.getSource() == b2) {
+                deleteCustomer();
+            } else if (ae.getSource() == b3) {
+                displayCustomers();
+            } else if (ae.getSource() == b4) {
+                displayRoomAvailability();
+            }
+        }
+    
+        public void insertCustomer() {
+            try {
+                PreparedStatement pstmt = conn.prepareStatement("INSERT INTO CUSTOMER(CID,CNAME,DOB,ROOM_NO,PH_NO) VALUES(?,?,?,?,?)");
+                pstmt.setString(1, t1.getText());
+                pstmt.setString(2, t2.getText());
+                pstmt.setString(3, t3.getText());
+                pstmt.setString(4, t4.getText());
+                pstmt.setString(5, t5.getText());
+                pstmt.executeUpdate();
+        
+                // Update room status to booked
+                updateRoomStatus(t4.getText(), "BOOKED");
+        
+                JOptionPane.showMessageDialog(this, "Customer inserted successfully");
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+        public void deleteCustomer() {
+            try {
+                PreparedStatement pstmt = conn.prepareStatement("DELETE FROM CUSTOMER WHERE CID = ?");
+                pstmt.setString(1, t1.getText());
+                int rowsAffected = pstmt.executeUpdate();
+                if (rowsAffected > 0) {
+                    // Update room status to available
+                    updateRoomStatus(t4.getText(), "AVAILABLE");
+                    JOptionPane.showMessageDialog(this, "Customer deleted successfully");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Customer with ID " + t1.getText() + " not found", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+        public void updateRoomStatus(String roomNo, String status) {
+            try {
+                PreparedStatement pstmt = conn.prepareStatement("UPDATE ROOM SET STATUS = ? WHERE ROOM_NO = ?");
+                pstmt.setString(1, status);
+                pstmt.setString(2, roomNo);
+                pstmt.executeUpdate();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Error updating room status: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+    
+        public void displayCustomers() {
+            try {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT * FROM CUSTOMER");
+    
+                // Create a DefaultTableModel to hold your data
+                DefaultTableModel model = new DefaultTableModel();
+                model.addColumn("CID");
+                model.addColumn("Name");
+                model.addColumn("DOB");
+                model.addColumn("Room No");
+                model.addColumn("Phone No");
+    
+                // Populate the model with data from the ResultSet
+                while (rs.next()) {
+                    Object[] row = {
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5)
+                    };
+                    model.addRow(row);
+                }
+    
+                // Create a JTable with the model
+                JTable table = new JTable(model);
+    
+                // Wrap the table in a scroll pane
+                JScrollPane scrollPane = new JScrollPane(table);
+    
+                // Create a JFrame to hold the scroll pane
+                JFrame frame = new JFrame("Customer Details");
+                frame.add(scrollPane);
+                frame.pack();
+                frame.setVisible(true);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    
+        public void displayRoomAvailability() {
+            try {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT ROOM_NO, ROOM_TYPE, STATUS FROM ROOM");
+    
+                // Create a DefaultTableModel to hold your data
+                DefaultTableModel model = new DefaultTableModel();
+                model.addColumn("Room No");
+                model.addColumn("Type");
+                model.addColumn("Status");
+    
+                // Populate the model with data from the ResultSet
+                while (rs.next()) {
+                    Object[] row = {
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3)
+                    };
+                    model.addRow(row);
+                }
+    
+                // Create a JTable with the model
+                JTable table = new JTable(model);
+    
+                // Wrap the table in a scroll pane
+                JScrollPane scrollPane = new JScrollPane(table);
+    
+                // Create a JFrame to hold the scroll pane
+                JFrame frame = new JFrame("Room Availability");
+                frame.add(scrollPane);
+                frame.pack();
+                frame.setVisible(true);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    
+       
+    }
+
+    class Room extends JFrame implements ActionListener {
+
+        JLabel l1, l2, l3, l4;
+        JTextField t1, t2, t3, t4;
+        JButton b1, b2, b3;
+        Connection conn;
+    
+        public Room() {
+            super("Room");
+    
+            setLayout(null);
+
+            setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+         addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e){
+
+                 new Dashboard().setVisible(true);;
+             }
+         });
+    
+            l1 = new JLabel("Room no.");
+            l1.setBounds(40, 20, 100, 30);
+            add(l1);
+    
+            l2 = new JLabel("Type");
+            l2.setBounds(40, 70, 100, 30);
+            add(l2);
+            
+            l3 = new JLabel("Price");
+            l3.setBounds(40, 120, 100, 30);
+            add(l3);
+            
+            l4 = new JLabel("Status");
+            l4.setBounds(40, 170, 100, 30);
+            add(l4);
+    
+            t1 = new JTextField();
+            t1.setBounds(150, 20, 150, 30);
+            add(t1);
+    
+            t2 = new JTextField();
+            t2.setBounds(150, 70, 150, 30);
+            add(t2);
+            
+            t3 = new JTextField();
+            t3.setBounds(150, 120, 150, 30);
+            add(t3);
+    
+            t4 = new JTextField();
+            t4.setBounds(150, 170, 150, 30);
+            add(t4);
+            
+            b1 = new JButton("insert");
+            b1.setBounds(40, 250, 120, 30);
+            b1.setFont(new Font("serif", Font.BOLD, 15));
+            b1.addActionListener(this);
+            b1.setBackground(Color.BLACK);
+            b1.setForeground(Color.WHITE);
+            add(b1);
+    
+            b2 = new JButton("display");
+            b2.setBounds(180, 250, 120, 30);
+            b2.setFont(new Font("serif", Font.BOLD, 15));
+            b2.setBackground(Color.BLACK);
+            b2.setForeground(Color.WHITE);
+            add(b2);
+            b2.addActionListener(this);
+
+            b3 = new JButton("delete");
+            b3.setBounds(320, 250, 120, 30);
+            b3.setFont(new Font("serif", Font.BOLD, 15));
+            b3.setBackground(Color.BLACK);
+            b3.setForeground(Color.WHITE);
+            add(b3);
+            b3.addActionListener(this);
+    
+            getContentPane().setBackground(Color.WHITE);
+    
+            setVisible(true);
+            setSize(600, 300);
+            setLocation(600, 350);
+    
+            // Connect to the database
+            try {
+                conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Hotel_DB", "root", "d1e2v3a4");
+            } catch (SQLException e) {
+                System.out.println("Failed to connect to the database.");
+                e.printStackTrace();
+            }
+        }
+    
+        public void actionPerformed(ActionEvent ae) {
+            if (ae.getSource() == b1) {
+                insertRoom();
+            } else if (ae.getSource() == b2) {
+                displayRooms();
+            }
+            else if (ae.getSource() == b3) {
+                deleteRoom();
+            }
+            
+        }
+
+        public void deleteRoom(){
+            try {
+                PreparedStatement pstmt = conn.prepareStatement("DELETE FROM ROOM WHERE ROOM_NO=?");
+                pstmt.setString(1, t1.getText());
+               
+                pstmt.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Room deleted successfully");
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    
+        public void insertRoom() {
+            try {
+                PreparedStatement pstmt = conn.prepareStatement("INSERT INTO ROOM(ROOM_NO,ROOM_TYPE,PRICE,STATUS) VALUES(?,?,?,?)");
+                pstmt.setString(1, t1.getText());
+                pstmt.setString(2, t2.getText());
+                pstmt.setDouble(3, Double.parseDouble(t3.getText()));
+                pstmt.setString(4, t4.getText());
+                pstmt.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Room inserted successfully");
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    
+        public void displayRooms() {
+            try {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT * FROM ROOM");
+    
+                // Create a DefaultTableModel to hold your data
+                DefaultTableModel model = new DefaultTableModel();
+                model.addColumn("Room No");
+                model.addColumn("Type");
+                model.addColumn("Price");
+                model.addColumn("Status");
+    
+                // Populate the model with data from the ResultSet
+                while (rs.next()) {
+                    Object[] row = {
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getDouble(3),
+                        rs.getString(4)
+                    };
+                    model.addRow(row);
+                }
+    
+                // Create a JTable with the model
+                JTable table = new JTable(model);
+    
+                // Wrap the table in a scroll pane
+                JScrollPane scrollPane = new JScrollPane(table);
+    
+                // Create a JFrame to hold the scroll pane
+                JFrame frame = new JFrame("Room Details");
+                frame.add(scrollPane);
+                frame.pack();
+                frame.setVisible(true);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    
+        
+    }
+
+
+    class Create_DB{
+        static final String DB_URL = "jdbc:mysql://localhost:3306/Hotel_DB";
+      
+    static final String user = "root";
+      
+    static final String pass = "d1e2v3a4";
+    Connection conn;
+    public Create_DB(){
+        try{
+            conn=DriverManager.getConnection(DB_URL,user,pass);
+            System.out.println("Connected to database");
+        }
+        catch(SQLException e){
+            System.out.println("Connection to database failed");
+            e.printStackTrace();
+            
+        }
+    }
+      public void createTables(){
+        try{
+            Statement stmt = conn.createStatement ();
+            String sql="CREATE DATABASE IF NOT EXISTS Hotel_DB";
+                    stmt.executeUpdate(sql);
+            String q= "Create table if not exists Employee(EName varchar(100) not null,EID varchar(3) primary key,Designation varchar(50),DOB date)";
+            stmt.executeUpdate (q);
+          
+            String a ="Create table if not exists CheckIN_CheckOUT(ROOM_NO varchar(5),CID varchar(5),CheckInDate date,CheckOutDate date,No_of_days int , TotalPrize int,foreign key(ROOM_NO)references ROOM(ROOM_NO))";
+          
+            stmt.executeUpdate (a);
+          
+            String aw= "Create table if not exists Menu(FoodID varchar(3) primary key,FoodName varchar(30),FoodPrice int)";
+            stmt.executeUpdate(aw);
+            String q2="CREATE TABLE IF NOT EXISTS ROOM(ROOM_NO VARCHAR(5) PRIMARY KEY NOT NULL,ROOM_TYPE VARCHAR(20),PRICE DECIMAL(10,2),STATUS VARCHAR(20))";
+            stmt.executeUpdate(q2);
+            
+           String q3="CREATE TABLE IF NOT EXISTS CUSTOMER(CID VARCHAR(5) PRIMARY KEY NOT NULL,CNAME VARCHAR(20),DOB DATE,ROOM_NO VARCHAR(5),PH_NO INT(20),FOREIGN KEY(ROOM_NO) REFERENCES ROOM(ROOM_NO))";
+           stmt.executeUpdate(q3); 
+           
+           String q4="INSERT INTO ROOM VALUES('A10','SINGLE',5000,'AVAILABLE')";
+            stmt.executeUpdate(q4);
+            
+            String q5="INSERT INTO ROOM VALUES('A11','SINGLE',5000,'AVAILABLE')";
+            stmt.executeUpdate(q5);
+            
+            String q6="INSERT INTO ROOM VALUES('A12','SUITE',7000,'AVAILABLE')";
+            stmt.executeUpdate(q6);
+            
+            String q7="INSERT INTO ROOM VALUES('A13','SUITE',7000,'AVAILABLE')";
+            stmt.executeUpdate(q7);
+             
+            String q8="INSERT INTO ROOM VALUES('A14','DELUXE',10000,'AVAILABLE')";
+            stmt.executeUpdate(q8);
+        
+            String q9="INSERT INTO ROOM VALUES('A15','DELUXE',10000,'AVAILABLE')";
+            stmt.executeUpdate(q9);
+           
+          String q10="INSERT INTO CUSTOMER VALUES('C1','APARNA','1998-09-01','A10',12345)";
+          stmt.executeUpdate(q10);
+       
+      String q11="INSERT INTO CUSTOMER VALUES('C2','JAYANT','1997-04-05','A10',22345)";
+      stmt.executeUpdate(q11);
+           
+          String q12="INSERT INTO CUSTOMER VALUES('C3','SHIKHA','2000-03-10','A14',32345)";
+      stmt.executeUpdate(q12);
+       
+      String q13="INSERT INTO CUSTOMER VALUES('C4','MALHAR','2001-12-12','A15',42345)";
+      stmt.executeUpdate(q13);
+                }
+                catch(SQLException e){
+                    System.out.println("EXCEPTION:"+e.getMessage());
+    
+                }
+        }
+          
+      }
+
+
+
+
+
+      class AddMenu extends JFrame{ 
+
+        
+        Connection conn; // Declare connection at the class level
+
+    public void conn() {  
+        try {  
+            Class.forName("com.mysql.jdbc.Driver");  
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Hotel_DB", "root", "d1e2v3a4"); 
+            Statement s = conn.createStatement();
+            System.out.println("connected");
+        } catch (Exception e) { 
+            System.out.println(e);
+        }  
+    }  
+        
+        
+        
+        JTextField textField,textField_1,textField_2,textField_3,textField_4,textField_5,textField_6;
+           
+            public AddMenu(){
+
+                
+
+                getContentPane().setForeground(Color.BLUE);
+                getContentPane().setBackground(Color.WHITE);
+                setTitle("ADD MENU DETAILS");
+             
+                //setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                setSize(778,486);
+                getContentPane().setLayout(null);
+                
+                JLabel fdn = new JLabel("FoodName");
+                fdn.setFont(new Font("Tahoma", Font.PLAIN, 17));
+                fdn.setBounds(60, 30, 150, 27);
+                add(fdn);
+                
+                textField = new JTextField();
+                textField.setBounds(200, 30, 150, 27);
+                add(textField);
+                
+                JButton Next = new JButton("SAVE");
+                Next.setBounds(100, 420, 150, 30);
+                Next.setBackground(Color.BLACK);
+                Next.setForeground(Color.WHITE);
+                add(Next);
+    
+                JButton Delete = new JButton("DELETE");
+                Delete.setBounds( 350, 420, 150, 30);
+                Delete.setBackground(Color.BLACK);
+                Delete.setForeground(Color.WHITE);
+                add(Delete);
+                
+                JButton Display = new JButton("DISPLAY");
+                Display.setBounds( 600, 420, 150, 30);
+                Display.setBackground(Color.BLACK);
+                Display.setForeground(Color.WHITE);
+                add(Display);
+    
+                JLabel FID = new JLabel("FoodID");
+                FID.setFont(new Font("Tahoma", Font.PLAIN, 17));
+               FID.setBounds(60, 80, 150, 27);
+                add(FID);
+                
+                textField_1 = new JTextField();
+                textField_1.setBounds(200, 80, 150, 27);
+                add(textField_1);
+                
+                JLabel fpz = new JLabel("FoodPrice");
+              fpz.setFont(new Font("Tahoma", Font.PLAIN, 17));
+             fpz.setBounds(60, 140, 150, 27);
+                add(fpz);
+    
+                textField_2 = new JTextField();
+                textField_2.setBounds(200, 140, 150, 27);
+                add(textField_2);
+    
+                setVisible(true);
+                JLabel AddPassengers = new JLabel("ADD MENU DETAILS");
+                AddPassengers.setForeground(Color.BLUE);
+                AddPassengers.setFont(new Font("Tahoma", Font.PLAIN, 31));
+                AddPassengers.setBounds(450, 24, 442, 35);
+                add(AddPassengers);
+                
+                Next.addActionListener(new ActionListener(){
+                    public void actionPerformed(ActionEvent ae){
+                        String fdn = textField.getText();
+                        String FID = textField_1.getText();
+                        String fpz = textField_2.getText();
+                        
+    
+                        try {
+                            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Hotel_DB", "root", "d1e2v3a4");
+                            Statement s = conn.createStatement();
+                            String str = "INSERT INTO Menu values( '"+FID+"', '"+fdn+"', '"+fpz+"')";
+                            
+                            s.executeUpdate(str);
+                            JOptionPane.showMessageDialog(AddMenu.this,"Menu Added");
+                            //setVisible(false);
+                            //new AddMenu().setVisible(true);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                    }
+            }
+                });
+    
+                Delete.addActionListener(new ActionListener(){
+                    public void actionPerformed(ActionEvent ae){
+                        String fdn = textField.getText();
+                        String FID = textField_1.getText();
+                        String fdz = textField_2.getText();
+    
+                        try {
+                            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Hotel_DB", "root", "d1e2v3a4");
+                            Statement s = conn.createStatement();
+                            String str = "DELETE from Menu where FoodID='"+FID+"'";
+                            
+                            s.executeUpdate(str);
+                            JOptionPane.showMessageDialog(AddMenu.this,"Menu Value Deleted");
+                            //setVisible(false);
+                            //new AddMenu().setVisible(true);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                    }
+            }
+                });
+    
+                Display.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent ae) {
+                        try {
+                            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Hotel_DB", "root", "d1e2v3a4");
+                            Statement stmt = conn.createStatement();
+                            ResultSet rs = stmt.executeQuery("SELECT * FROM Menu");
+        
+                            // Create a DefaultTableModel to hold your data
+                            DefaultTableModel model = new DefaultTableModel();
+                            model.addColumn("FoodID");
+                            model.addColumn("FoodName");
+                            model.addColumn("FoodPrice");
+        
+                            // Populate the model with data from the ResultSet
+                            while (rs.next()) {
+                                Object[] row = {
+                                    rs.getString(1),
+                                    rs.getString(2),
+                                    rs.getString(3)
+                                };
+                                model.addRow(row);
+                            }
+        
+                            // Create a JTable with the model
+                            JTable table = new JTable(model);
+        
+                            // Wrap the table in a scroll pane
+                            JScrollPane scrollPane = new JScrollPane(table);
+        
+                            // Create a JFrame to hold the scroll pane
+                            JFrame frame = new JFrame("Menu Details");
+                            frame.add(scrollPane);
+                            frame.pack();
+                            frame.setVisible(true);
+        
+                        } catch (SQLException e) {
+                            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                });
+                
+                setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e){
+
+                new Dashboard().setVisible(true);;
+            }
+        });
+                setSize(900,600);
+                setVisible(true);
+                setLocation(530,200);
+                
+        }
+        
+        
+      
+            
+        
+        
+    }
+
+
+
+
+
+
+class Reception extends JFrame {
+
+    public Reception() {
+        setBounds(530, 200, 850, 570);
+        JPanel contentPane = new JPanel();
+        setContentPane(contentPane);
+        contentPane.setLayout(null);
+
+        ImageIcon imageIcon = new ImageIcon("C:\\Users\\ASUS\\.vscode\\cli\\jdbc\\src\\ezgif-1-faaa98104a.jpg"); // Assuming the image is in the project directory
+        Image image = imageIcon.getImage().getScaledInstance(430, 430, Image.SCALE_DEFAULT);
+        ImageIcon scaledIcon = new ImageIcon(image);
+
+        // Create and add the JLabel with the image
+        JLabel imageLabel = new JLabel(scaledIcon);
+        imageLabel.setBounds(100, -120, 688, 700);
+        add(imageLabel);
+
+        JButton btnNewCustomerForm = new JButton("New Customer ");
+        btnNewCustomerForm.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                   //Example: Open a new customer form
+                   Customer custom = new Customer();
+                   custom.setVisible(true);
+                   setVisible(false);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+        btnNewCustomerForm.setBounds(10, 30, 200, 30);
+        btnNewCustomerForm.setBackground(Color.BLACK);
+        btnNewCustomerForm.setForeground(Color.WHITE);
+        contentPane.add(btnNewCustomerForm);
+
+        // Add other buttons and their action listeners similarly
+
+        JButton btnNewButton = new JButton("Room");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try{
+				// Example: Open a room management interface
+				Room room = new Room();
+				room.setVisible(true);
+                setVisible(false);
+				}
+				catch(Exception e){
+					e.printStackTrace();
+				}
+				
+			}
+		});
+		btnNewButton.setBounds(10, 70, 200, 30);
+        btnNewButton.setBackground(Color.BLACK);
+        btnNewButton.setForeground(Color.WHITE);
+		contentPane.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("Check in Check out ");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+					// Example: Open a check-in/check-out interface
+					chk_in_out chk = new chk_in_out();
+					chk.setVisible(true);
+					setVisible(false);
+					
+				}
+				catch (Exception e1){
+					e1.printStackTrace();
+				}
+			
+			}
+		});
+		btnNewButton_1.setBounds(10, 110, 200, 30);
+        btnNewButton_1.setBackground(Color.BLACK);
+        btnNewButton_1.setForeground(Color.WHITE);
+		contentPane.add(btnNewButton_1);
+		
+		JButton btnNewButton_2 = new JButton("Menu");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+				
+					// Example: Open a menu management interface
+					AddMenu menu = new AddMenu();
+					menu.setVisible(true);
+					setVisible(false);
+					
+				}
+				catch (Exception e1){
+					e1.printStackTrace();
+				}
+			
+			}
+		});
+		btnNewButton_2.setBounds(10, 150, 200, 30);                
+        btnNewButton_2.setBackground(Color.BLACK);
+        btnNewButton_2.setForeground(Color.WHITE);
+		contentPane.add(btnNewButton_2);
+		
+		JButton btnNewButton_3 = new JButton("Employee");
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try{
+				// Example: Open an employee management interface
+				 AddEmployee emp = new AddEmployee();
+				emp.setVisible(true);
+                setVisible(false);
+				}
+				catch(Exception e){
+					e.printStackTrace();
+				}
+				
+			}
+		});
+		btnNewButton_3.setBounds(10, 190, 200, 30);
+        btnNewButton_3.setBackground(Color.BLACK);
+        btnNewButton_3.setForeground(Color.WHITE);
+		contentPane.add(btnNewButton_3);
+
+        JButton btnNewButton_7 = new JButton("Log Out");
+        btnNewButton_7.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                try {
+                    //Example: Log out the user
+                System.exit(1);
+                    setVisible(false);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        btnNewButton_7.setBounds(10, 470, 200, 30);
+        btnNewButton_7.setBackground(Color.BLACK);
+        btnNewButton_7.setForeground(Color.WHITE);
+        contentPane.add(btnNewButton_7);
+
+
+        JButton btnNewButton_8 = new JButton("TABLE CREATION");
+        btnNewButton_8.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                try {
+                    // Example: Log out the user
+                    Create_DB db=new Create_DB();
+                    db.createTables();
+                    setVisible(false);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        btnNewButton_8.setBounds(220, 470, 200, 30);
+        btnNewButton_8.setBackground(Color.BLACK);
+        btnNewButton_8.setForeground(Color.WHITE);
+        contentPane.add(btnNewButton_8);
+
+setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e){
+
+                new Dashboard().setVisible(true);;
+            }
+        });
+
+        getContentPane().setBackground(Color.WHITE);
+        setVisible(true);
+    }
+}
