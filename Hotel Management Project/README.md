@@ -9,4 +9,6 @@ This project is a comprehensive hotel management system developed using Java Swi
 - **Menu Management:** Maintain and update menu details for the hotel’s dining services.
 - **Reservation System:** Create, update, and cancel room reservations.
 - **Billing System:** Handle billing and payment processes.
-- You can view the user manual PDF directly [here](https://github.com/EshaKhadeejaC/Projects/blob/main/Hotel%20Management%20Project/Hotel%20Management%20System.pdf).
+
+
+- You can view the PDF directly [here](https://github.com/EshaKhadeejaC/Projects/blob/main/Hotel%20Management%20Project/Hotel%20Management%20System.pdf).
