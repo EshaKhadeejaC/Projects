@@ -1,6 +1,6 @@
 # Projects
 
-Welcome to my "Projects" repository! This repository showcases a collection of projects that I have worked on, each demonstrating different aspects of my skills and interests.
+Welcome to my Projects repository! This repository showcases a collection of projects that I have worked on, each demonstrating different aspects of my skills and interests.
 
 ### 1. Vulnerability Assessment on Windows Machine
 This project involves performing a detailed vulnerability assessment on a Windows machine. It includes identifying potential security weaknesses, analyzing vulnerabilities, and suggesting remediation strategies to enhance system security.
