@@ -1,4 +1,4 @@
-# Hotel Management System
+# HotelSync
 
 This project is a comprehensive hotel management system developed using Java Swing for the graphical user interface and SQL for database management. It provides functionalities for managing various aspects of hotel operations efficiently.
 
