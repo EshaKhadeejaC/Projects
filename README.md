@@ -8,5 +8,5 @@ This project involves performing a detailed vulnerability assessment on a Window
 ### 2. Implementing Wazuh
 A project focused on deploying and configuring Wazuh, an open-source security monitoring platform. It includes setting up Wazuh for intrusion detection, log analysis, and compliance monitoring to ensure robust security management.
 
-### 3. Hotel Management System
+### 3. HotelSync
 A comprehensive hotel management system developed using Java Swing for the user interface and SQL for database management. This system handles customer and employee management, room reservations, menu details, and billing.
