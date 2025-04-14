@@ -562,9 +562,9 @@ class ExamGenerator:
 # Modified main function
 if __name__ == '__main__':
     # Configuration
-    GOOGLE_API_KEY ="AIzaSyCeH7ujasG6FhoEWIa2Rv-hV41gi8pSJUo"#"AIzaSyBPYOjgb-aIask1WBreXHnlYYz1uERNajI"#"AIzaSyAI7sZMtfXFC_M5szA15zTZk2xD0vRN8C0" #"AIzaSyCeH7ujasG6FhoEWIa2Rv-hV41gi8pSJUo" #"AIzaSyCwLyDtjsh7lpROQdQ90Jrv5nzAnzzDzow" 
-    SOURCE_FOLDER_ID = "1vhR1ZIrWVZFWsBaSHCSsKyaBguH20ae6"  
-    OUTPUT_FOLDER_ID = "1cPZFA2yBqEcCjN2BzyC2ZA2KzJeWtV25"  
+    GOOGLE_API_KEY = #add ur api key
+    SOURCE_FOLDER_ID = #add ur folder id
+    OUTPUT_FOLDER_ID =#add ur folder id
     # Set up logging with more detailed format
     logging.basicConfig(
         level=logging.INFO,
