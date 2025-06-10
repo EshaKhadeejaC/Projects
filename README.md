@@ -10,3 +10,6 @@ A project focused on deploying and configuring Wazuh, an open-source security mo
 
 ### 3. HotelSync
 A comprehensive hotel management system developed using Java Swing for the user interface and SQL for database management. This system handles customer and employee management, room reservations, menu details, and billing.
+
+### 4. AutoExaminer
+AutoExaminer is an advanced question paper generator and evaluator that leverages AI to create and assess educational content. The system automates the creation of diverse question types from textbook content and offers evaluation capabilities for handwritten answer sheets.
