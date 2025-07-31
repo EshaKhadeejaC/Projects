@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AUTOEXAMINER - Main App</title>
+  <style>
+    :root {
+      --primary-color: #B4866E;  /* Soft Light Brown */
+      --secondary-color: #D2B48C;  /* Soft Tan */
+      --background-color: #F5F0E6;  /* Creamy Beige */
+      --text-color: #6D4C41;  /* Deep Warm Brown */
+      --accent-color: #A1887F;  /* Muted Rose Brown */
+      --white: #FFFFFF;
+    }
+
+    * {
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Quicksand', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 20px auto;
+      background-color: var(--white);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(180, 134, 110, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--secondary-color);
+    }
+
+    .header h1 {
+      color: var(--primary-color);
+      font-weight: 600;
+      margin: 0;
+      font-size: 2.2em;
+      letter-spacing: -0.5px;
+    }
+
+    .navigation {
+      display: flex;
+      gap: 15px;
+    }
+
+    .btn {
+      background-color: var(--primary-color);
+      color: var(--white);
+      border: none;
+      padding: 10px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 5px 15px rgba(180, 134, 110, 0.2);
+    }
+
+    .btn:hover {
+      background-color: #C29A82;  /* Slightly lighter brown */
+      transform: translateY(-3px);
+      box-shadow: 0 7px 20px rgba(180, 134, 110, 0.3);
+    }
+
+    .btn:disabled {
+      background-color: var(--secondary-color);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .section {
+      background-color: var(--white);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(180, 134, 110, 0.08);
+      box-shadow: 0 8px 20px rgba(180, 134, 110, 0.05);
+    }
+
+    .section-title {
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--secondary-color);
+      padding-bottom: 10px;
+      margin-top: 0;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text-color);
+    }
+
+    input[type="file"] {
+      width: 100%;
+      padding: 15px;
+      border: 2px dashed var(--secondary-color);
+      border-radius: 12px;
+      background-color: rgba(210, 180, 140, 0.1);
+      color: var(--text-color);
+      margin-bottom: 10px;
+    }
+
+    /* Radio buttons styling */
+    .radio-options {
+      margin: 20px 0;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    input[type="radio"] {
+      margin-right: 8px;
+    }
+
+    .status-message {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 500;
+    }
+
+    .success {
+      background-color: rgba(210, 180, 140, 0.2);
+      color: #5D4037;
+      border-left: 4px solid var(--primary-color);
+    }
+
+    .error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border-left: 4px solid #f5c6cb;
+    }
+
+    .info {
+      background-color: rgba(210, 180, 140, 0.1);
+      color: var(--text-color);
+      border-left: 4px solid var(--secondary-color);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(180, 134, 110, 0.2);
+      border-radius: 50%;
+      border-top-color: var(--primary-color);
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Home page specific styles */
+    .feature-card {
+      border: 1px solid var(--secondary-color);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background-color: rgba(210, 180, 140, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(180, 134, 110, 0.15);
+    }
+
+    .feature-card h3 {
+      color: var(--primary-color);
+      margin-top: 0;
+      border-bottom: 1px solid var(--secondary-color);
+      padding-bottom: 10px;
+    }
+
+    .feature-card-buttons {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 15px;
+    }
+
+    /* File name display */
+    .file-name {
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .navigation {
+        margin-top: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .container {
+        width: 95%;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>AUTOEXAMINER</h1>
+      <div class="navigation">
+        <button class="btn" onclick="toggleHome()">Home</button>
+        <button class="btn" onclick="toggleQuestionGeneration()">Question Generation</button>
+        <button class="btn" onclick="toggleAnswerEvaluation()">Answer Evaluation</button>
+      </div>
+    </div>
+    
+    <!-- Home Section -->
+    <div id="homeSection" class="section">
+      <h2 class="section-title">Welcome to AutoExaminer</h2>
+      <p>Revolutionizing Examination Processes for CBSE Higher Secondary Education</p>
+
+      <p>In the digital age of education, AutoExaminer emerges as a groundbreaking AI-powered solution designed to address the most challenging aspects of academic assessment. Our innovative platform harnesses the power of artificial intelligence, natural language processing, and machine learning to reimagine how question papers are generated and answer sheets are evaluated.</p>
+
+      <h3>Our Vision</h3>
+      <p>Eliminate the limitations of traditional examination methods by introducing:</p>
+      <ul>
+        <li>Efficiency: Dramatically reduce time-consuming manual processes</li>
+        <li>Accuracy: Ensure objective and consistent assessment</li>
+        <li>Fairness: Provide transparent and unbiased evaluation</li>
+      </ul>
+
+      <div class="feature-card">
+        <h3>🧠 Intelligent Question Generation</h3>
+        <ul>
+          <li>Automated creation of comprehensive question sets</li>
+          <li>Dynamic difficulty level customization</li>
+          <li>Support for multiple academic disciplines</li>
+          <li>Questions generated from textbook content using advanced AI algorithms</li>
+        </ul>
+        <div class="feature-card-buttons">
+          <button class="btn" onclick="toggleQuestionGeneration()">Try Question Generation</button>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h3>📝 Smart Answer Evaluation</h3>
+        <ul>
+          <li>Optical Character Recognition (OCR) for seamless answer sheet processing</li>
+          <li>AI-driven grading with model answer comparisons</li>
+          <li>Detailed performance analysis</li>
+          <li>Instant, constructive feedback for students and educators</li>
+        </ul>
+        <div class="feature-card-buttons">
+          <button class="btn" onclick="toggleAnswerEvaluation()">Try Answer Evaluation</button>
+        </div>
+      </div>
+
+      <p><em>Intelligent. Efficient. Educational.</em></p>
+    </div>
+    
+    <!-- Question Generation Section - Updated to match the reference image -->
+    <div id="questionGenerationSection" class="section hidden">
+      <h2 class="section-title">Question Generator</h2>
+      
+      <h3>How It Works</h3>
+      <ol>
+        <li>Upload Study Material
+          <ul>
+            <li>Upload your study material PDF directly from Google Drive</li>
+          </ul>
+        </li>
+        <li>Select Question Difficulty Level
+          <ul>
+            <li>Standard
+              <ul>
+                <li>Foundational knowledge assessment</li>
+                <li>Basic conceptual understanding</li>
+                <li>Suitable for introductory learning</li>
+              </ul>
+            </li>
+            <li>Difficult
+              <ul>
+                <li>Deeper conceptual understanding</li>
+                <li>Complex analytical questions</li>
+                <li>Challenges higher-order thinking skills</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>Download Generated Questions
+          <ul>
+            <li>Instantly receive AI-generated question paper</li>
+            <li>Compatible with CBSE curriculum standards</li>
+            <li>Multiple question formats available</li>
+          </ul>
+        </li>
+      </ol>
+      
+      <div class="form-group">
+        <input type="file" id="questionPDF" accept=".pdf" onchange="validateQuestionFile()">
+        <div id="fileNameDisplay" class="file-name"></div>
+      </div>
+      
+      <div class="radio-options">
+        <input type="radio" id="standardOption" name="difficulty" value="standard" checked>
+        <label for="standardOption">Standard</label>
+        
+        <input type="radio" id="difficultOption" name="difficulty" value="difficult">
+        <label for="difficultOption">Difficult</label>
+      </div>
+      
+      <button id="generateQuestionsBtn" class="btn" onclick="uploadQuestionPDF()" disabled>Generate Questions</button>
+      <button id="checkQuestionsBtn" class="btn hidden" onclick="checkQuestions()">Check Status</button>
+      <button id="downloadQuestionsBtn" class="btn hidden" onclick="downloadQuestions()">Download Questions</button>
+      
+      <div id="questionStatusMessage" class="status-message hidden"></div>
+    </div>
+    
+    <div id="answerEvaluationSection" class="section hidden">
+      <h2 class="section-title">Answer Evaluator: Simple Evaluation Process</h2>
+      
+      <div class="evaluation-step">
+        <h3>1. Prepare Your Documents</h3>
+        <ul>
+          <li>Ensure you have two files ready:
+            <ul>
+              <li>Completed answer sheet (student's responses)</li>
+              <li>Corresponding answer key (correct answers)</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="evaluation-step">
+        <h3>2. Upload Answer Sheet</h3>
+        <ul>
+          <li>Click on the "Upload Answer Sheet" button</li>
+          <li>Select the file containing the student's answers from drive</li>
+          <li>Verify the file is correctly uploaded</li>
+        </ul>
+        
+      </div>
+      
+      <div class="evaluation-step">
+        <h3>3. Upload Answer Key</h3>
+        <ul>
+          <li>Click on the "Upload Answer Key" button</li>
+          <li>Select the file with the correct answers</li>
+          <li>Confirm the file matches the answer sheet</li>
+        </ul>
+        
+      </div>
+      
+      <div class="evaluation-step">
+        <h3>4. Initiate Evaluation</h3>
+        <ul>
+          <li>Press the "Evaluate" button</li>
+          <li>Wait for the system to process and compare answers</li>
+        </ul>
+      </div>
+      
+      <div class="evaluation-step">
+        <h3>5. Review Detailed Results</h3>
+        <ul>
+          <li>View comprehensive evaluation report</li>
+        </ul>
+      </div>
+      
+      <div class="form-group">
+          <label for="answerSheetPDF">Answer Sheet:</label>
+          <input type="file" id="answerSheetPDF" accept=".pdf" onchange="validateEvaluationFiles()">
+      </div>
+      <div class="form-group">
+          <label for="answerKeyPDF">Answer Key:</label>
+          <input type="file" id="answerKeyPDF" accept=".pdf" onchange="validateEvaluationFiles()">
+      </div>
+      
+      <button id="evaluateBtn" class="upload-button" onclick="uploadForEvaluation()" disabled>UPLOAD AND EVALUATE</button>
+      <button id="checkEvaluationBtn" class="btn hidden" onclick="checkEvaluation()">Check Status</button>
+      <button id="downloadResultsBtn" class="btn hidden" onclick="downloadResults()">Download Results</button>
+      
+      <div id="evaluationStatusMessage" class="status-message hidden"></div>
+    </div>
+  </div>
+
+  <script>
+    // Global variables to store file data
+    let questionDownloadKey = null;
+    let questionResultFileId = null;
+    let evaluationKey = null;
+    let evaluationResultFileId = null;
+    let originalFileName = ""; // Store original file name
+    let selectedDifficulty = ""; // Store selected difficulty
+    let expectedFileName = ""; // Store expected filename in Drive
+    
+    // Navigation functions
+    function toggleHome() {
+      document.getElementById('homeSection').classList.remove('hidden');
+      document.getElementById('questionGenerationSection').classList.add('hidden');
+      document.getElementById('answerEvaluationSection').classList.add('hidden');
+    }
+    
+    function toggleQuestionGeneration() {
+      document.getElementById('homeSection').classList.add('hidden');
+      document.getElementById('questionGenerationSection').classList.remove('hidden');
+      document.getElementById('answerEvaluationSection').classList.add('hidden');
+    }
+    
+    function toggleAnswerEvaluation() {
+      document.getElementById('homeSection').classList.add('hidden');
+      document.getElementById('questionGenerationSection').classList.add('hidden');
+      document.getElementById('answerEvaluationSection').classList.remove('hidden');
+    }
+    
+    // Validate question file input
+    function validateQuestionFile() {
+      const fileInput = document.getElementById('questionPDF');
+      const generateBtn = document.getElementById('generateQuestionsBtn');
+      const fileNameDisplay = document.getElementById('fileNameDisplay');
+      
+      if (fileInput.files.length && fileInput.files[0].type === 'application/pdf') {
+        generateBtn.disabled = false;
+        fileNameDisplay.textContent = fileInput.files[0].name;
+      } else {
+        generateBtn.disabled = true;
+        fileNameDisplay.textContent = '';
+      }
+    }
+    
+    // Validate evaluation files input
+    function validateEvaluationFiles() {
+      const answerSheetInput = document.getElementById('answerSheetPDF');
+      const answerKeyInput = document.getElementById('answerKeyPDF');
+      const evaluateBtn = document.getElementById('evaluateBtn');
+      
+      const answerSheetValid = answerSheetInput.files.length && answerSheetInput.files[0].type === 'application/pdf';
+      const answerKeyValid = answerKeyInput.files.length && answerKeyInput.files[0].type === 'application/pdf';
+      
+      evaluateBtn.disabled = !(answerSheetValid && answerKeyValid);
+    }
+    
+    // Upload PDF for question generation
+    function uploadQuestionPDF() {
+      const fileInput = document.getElementById('questionPDF');
+      const statusMessage = document.getElementById('questionStatusMessage');
+      
+      if (!fileInput.files.length) {
+        showMessage(statusMessage, 'Please select a PDF file.', 'error');
+        return;
+      }
+      
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      
+      // Get selected difficulty from radio buttons
+      const difficultyOptions = document.getElementsByName('difficulty');
+      for (const option of difficultyOptions) {
+        if (option.checked) {
+          selectedDifficulty = option.value;
+          break;
+        }
+      }
+      
+      // Store original filename (without extension) and difficulty for naming
+      originalFileName = file.name.replace(/\.pdf$/i, '');
+      
+      // Create modified filename with format "filename#difficulty.pdf"
+      const modifiedFileName = originalFileName + "#" + selectedDifficulty + ".pdf";
+      expectedFileName = originalFileName + "#" + selectedDifficulty;
+      
+      // Show loading status
+      document.getElementById('generateQuestionsBtn').disabled = true;
+      showMessage(statusMessage, '<div class="loading"></div> Uploading file...', 'info');
+      
+      reader.onload = function(e) {
+        const fileData = e.target.result;
+        
+        // Call the server-side function with the modified filename
+        google.script.run
+          .withSuccessHandler(function(response) {
+            if (response.success) {
+              questionDownloadKey = response.downloadKey;
+              showMessage(statusMessage, 'File uploaded successfully as ' + modifiedFileName + '. Checking for generated questions...', 'success');
+              
+              // Show check status button
+              document.getElementById('checkQuestionsBtn').classList.remove('hidden');
+              
+              // Automatically check for generated questions after upload
+              setTimeout(checkQuestions, 3000);
+            } else {
+              showMessage(statusMessage, response.message, 'error');
+              document.getElementById('generateQuestionsBtn').disabled = false;
+            }
+          })
+          .withFailureHandler(function(error) {
+            showMessage(statusMessage, 'Error: ' + error.message, 'error');
+            document.getElementById('generateQuestionsBtn').disabled = false;
+          })
+          .uploadPDFForQuestions(fileData, modifiedFileName, selectedDifficulty);
+      };
+      
+      reader.readAsDataURL(file);
+    }
+    
+    // Check for generated questions
+    function checkQuestions() {
+      if (!questionDownloadKey || !expectedFileName) {
+        showMessage(document.getElementById('questionStatusMessage'), 'No pending question generation.', 'error');
+        return;
+      }
+      
+      const statusMessage = document.getElementById('questionStatusMessage');
+      showMessage(statusMessage, '<div class="loading"></div> Checking for generated questions...', 'info');
+      
+      // Check for the file in Drive with the exact expected filename pattern
+      google.script.run
+        .withSuccessHandler(function(response) {
+          if (response.found) {
+            questionResultFileId = response.fileId;
+            showMessage(statusMessage, 'Questions have been generated: ' + response.fileName, 'success');
+            
+            // Show download button
+            document.getElementById('downloadQuestionsBtn').classList.remove('hidden');
+          } else {
+            showMessage(statusMessage, 'Still processing... Will check again in 10 seconds.', 'info');
+            
+            // Schedule another check in 10 seconds
+            setTimeout(checkQuestions, 10000);
+          }
+        })
+        .withFailureHandler(function(error) {
+          showMessage(statusMessage, 'Error checking for questions: ' + error.message, 'error');
+          
+          // Fall back to standard check method if direct check fails
+          google.script.run
+            .withSuccessHandler(function(response) {
+              if (response.found) {
+                questionResultFileId = response.fileId;
+                showMessage(statusMessage, 'Questions have been generated: ' + response.fileName, 'success');
+                
+                // Show download button
+                document.getElementById('downloadQuestionsBtn').classList.remove('hidden');
+              } else {
+                showMessage(statusMessage, 'Still processing... Will check again in 10 seconds.', 'info');
+                
+                // Schedule another check in 10 seconds
+                setTimeout(checkQuestions, 10000);
+              }
+            })
+            .withFailureHandler(function(error) {
+              showMessage(statusMessage, 'Error with fallback check: ' + error.message, 'error');
+            })
+            .checkForGeneratedQuestions(questionDownloadKey);
+        })
+        .checkForFileInDrive(expectedFileName);
+    }
+    
+    // Download generated questions
+    function downloadQuestions() {
+      if (!questionResultFileId) {
+        showMessage(document.getElementById('questionStatusMessage'), 'No questions available for download.', 'error');
+        return;
+      }
+      
+      const statusMessage = document.getElementById('questionStatusMessage');
+      showMessage(statusMessage, '<div class="loading"></div> Preparing download...', 'info');
+      
+      google.script.run
+        .withSuccessHandler(function(response) {
+          if (response.success) {
+            // Create download link
+            const link = document.createElement('a');
+            link.href = 'data:' + response.mimeType + ';base64,' + response.content;
+            link.download = response.fileName;
+            link.click();
+            
+            showMessage(statusMessage, 'Downloaded successfully.', 'success');
+            
+            // Reset the question generation section
+            setTimeout(function() {
+              document.getElementById('questionPDF').value = '';
+              document.getElementById('fileNameDisplay').textContent = '';
+              document.getElementById('generateQuestionsBtn').disabled = true;
+              document.getElementById('checkQuestionsBtn').classList.add('hidden');
+              document.getElementById('downloadQuestionsBtn').classList.add('hidden');
+              statusMessage.classList.add('hidden');
+              questionDownloadKey = null;
+              questionResultFileId = null;
+              originalFileName = "";
+              selectedDifficulty = "";
+              expectedFileName = "";
+            }, 3000);
+          } else {
+            showMessage(statusMessage, response.message, 'error');
+          }
+        })
+        .withFailureHandler(function(error) {
+          showMessage(statusMessage, 'Error downloading questions: ' + error.message, 'error');
+        })
+        .getGeneratedQuestionsPDF(questionResultFileId);
+    }
+    
+    // Upload answer sheet and answer key for evaluation
+    function uploadForEvaluation() {
+      const answerSheetInput = document.getElementById('answerSheetPDF');
+      const answerKeyInput = document.getElementById('answerKeyPDF');
+      const statusMessage = document.getElementById('evaluationStatusMessage');
+      
+      if (!answerSheetInput.files.length || !answerKeyInput.files.length) {
+        showMessage(statusMessage, 'Please select both an answer sheet and an answer key.', 'error');
+        return;
+      }
+      
+      const answerSheetFile = answerSheetInput.files[0];
+      const answerKeyFile = answerKeyInput.files[0];
+      
+      const answerSheetReader = new FileReader();
+      const answerKeyReader = new FileReader();
+      
+      // Show loading status
+      document.getElementById('evaluateBtn').disabled = true;
+      showMessage(statusMessage, '<div class="loading"></div> Uploading files...', 'info');
+      
+      // Read answer sheet file
+      answerSheetReader.onload = function(e) {
+        const answerSheetData = e.target.result;
+        
+        // Read answer key file
+        answerKeyReader.onload = function(e) {
+          const answerKeyData = e.target.result;
+          
+          // Call the server-side function
+          google.script.run
+            .withSuccessHandler(function(response) {
+              if (response.success) {
+                evaluationKey = response.evaluationKey;
+                showMessage(statusMessage, 'Files uploaded successfully. Checking for evaluation results...', 'success');
+                
+                // Show check status button
+                document.getElementById('checkEvaluationBtn').classList.remove('hidden');
+                
+                // Automatically check for evaluation results after upload
+                setTimeout(checkEvaluation, 3000);
+              } else {
+                showMessage(statusMessage, response.message, 'error');
+                document.getElementById('evaluateBtn').disabled = false;
+              }
+            })
+            .withFailureHandler(function(error) {
+              showMessage(statusMessage, 'Error: ' + error.message, 'error');
+              document.getElementById('evaluateBtn').disabled = false;
+            })
+            .uploadForEvaluation(
+              answerSheetData, 
+              answerSheetFile.name, 
+              answerKeyData, 
+              answerKeyFile.name
+            );
+        };
+        
+        answerKeyReader.readAsDataURL(answerKeyFile);
+      };
+      
+      answerSheetReader.readAsDataURL(answerSheetFile);
+    }
+    
+    // Check for evaluation results
+    function checkEvaluation() {
+      if (!evaluationKey) {
+        showMessage(document.getElementById('evaluationStatusMessage'), 'No pending evaluation.', 'error');
+        return;
+      }
+      
+      const statusMessage = document.getElementById('evaluationStatusMessage');
+      showMessage(statusMessage, '<div class="loading"></div> Checking for evaluation results...', 'info');
+      
+      google.script.run
+        .withSuccessHandler(function(response) {
+          if (response.found) {
+            evaluationResultFileId = response.fileId;
+            showMessage(statusMessage, 'Evaluation results are ready: ' + response.fileName, 'success');
+            
+            // Show download button
+            document.getElementById('downloadResultsBtn').classList.remove('hidden');
+          } else {
+            showMessage(statusMessage, 'Still processing... Will check again in 10 seconds.', 'info');
+            
+            // Schedule another check in 10 seconds
+            setTimeout(checkEvaluation, 10000);
+          }
+        })
+        .withFailureHandler(function(error) {
+          showMessage(statusMessage, 'Error checking for evaluation results: ' + error.message, 'error');
+        })
+        .checkForEvaluationResults(evaluationKey);
+    }
+    
+    // Download evaluation results
+    function downloadResults() {
+      if (!evaluationResultFileId) {
+        showMessage(document.getElementById('evaluationStatusMessage'), 'No results available for download.', 'error');
+        return;
+      }
+      
+      const statusMessage = document.getElementById('evaluationStatusMessage');
+      showMessage(statusMessage, '<div class="loading"></div> Preparing download...', 'info');
+      
+      google.script.run
+        .withSuccessHandler(function(response) {
+          if (response.success) {
+            // Create download link
+            const link = document.createElement('a');
+            link.href = 'data:' + response.mimeType + ';base64,' + response.content;
+            link.download = response.fileName;
+            link.click();
+            
+            showMessage(statusMessage, 'Downloaded successfully.', 'success');
+            
+            // Reset the evaluation section
+            setTimeout(function() {
+              document.getElementById('answerSheetPDF').value = '';
+              document.getElementById('answerKeyPDF').value = '';
+              document.getElementById('evaluateBtn').disabled = true;
+              document.getElementById('checkEvaluationBtn').classList.add('hidden');
+              document.getElementById('downloadResultsBtn').classList.add('hidden');
+              statusMessage.classList.add('hidden');
+              evaluationKey = null;
+              evaluationResultFileId = null;
+            }, 3000);
+          } else {
+            showMessage(statusMessage, response.message, 'error');
+          }
+        })
+        .withFailureHandler(function(error) {
+          showMessage(statusMessage, 'Error downloading results: ' + error.message, 'error');
+        })
+        .getEvaluationResultsPDF(evaluationResultFileId);
+    }
+    
+    // Helper function to show status messages
+    function showMessage(element, message, type) {
+      element.innerHTML = message;
+      element.className = 'status-message ' + type;
+      element.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
