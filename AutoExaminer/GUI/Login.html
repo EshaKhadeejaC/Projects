@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+      :root {
+        --primary-color: #B4866E;  /* Soft Light Brown */
+        --secondary-color: #D2B48C;  /* Soft Tan */
+        --background-color: #F5F0E6;  /* Creamy Beige */
+        --text-color: #6D4C41;  /* Deep Warm Brown */
+        --accent-color: #A1887F;  /* Muted Rose Brown */
+        --white: #FFFFFF;
+      }
+
+      * {
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+      }
+
+      body {
+        font-family: 'Quicksand', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        line-height: 1.6;
+      }
+
+      .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 20px auto;
+        background-color: var(--white);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 15px 30px rgba(180, 134, 110, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 6px;
+        background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      }
+
+      .card {
+        border-radius: 20px;
+        box-shadow: 0 15px 30px rgba(180, 134, 110, 0.1);
+        overflow: hidden;
+      }
+
+      .card-content {
+        padding: 20px;
+      }
+
+      .tabs {
+        background-color: var(--white);
+      }
+
+      .tabs .tab a {
+        color: var(--primary-color);
+      }
+
+      .tabs .tab a.active {
+        color: var(--primary-color);
+        font-weight: bold;
+      }
+
+      .tabs .indicator {
+        background-color: var(--primary-color);
+      }
+
+      .btn {
+        background-color: var(--primary-color);
+        color: var(--white);
+        transition: all 0.3s ease;
+      }
+
+      .btn:hover {
+        background-color: #C29A82;
+        transform: translateY(-3px);
+        box-shadow: 0 7px 20px rgba(180, 134, 110, 0.3);
+      }
+
+      .login-card {
+        margin-top: 50px;
+      }
+
+      /* Retain original form display logic */
+      .form-container {
+        display: block;
+      }
+      .form-container.hidden {
+        display: none;
+      }
+
+      .red-text {
+        color: #D32F2F;
+      }
+
+      .green-text {
+        color: #B4866E; 
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row login-card">
+        <div class="col s12 m8 offset-m2 l6 offset-l3">
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title center-align"><b>AUTOEXAMINER</b></span>
+            </div>
+            <div class="card-tabs">
+              <ul class="tabs tabs-fixed-width">
+                <li class="tab"><a href="#login" class="active">Login</a></li>
+                <li class="tab"><a href="#register">Register</a></li>
+              </ul>
+            </div>
+            <div class="card-content">
+              <!-- Login Form -->
+              <div id="login">
+                <h6 class="center-align">Login to access the system</h6>
+                <form id="loginForm" class="col s12">
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <input id="loginUsername" type="text" class="validate" required>
+                      <label for="loginUsername">Username</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <input id="loginPassword" type="password" class="validate" required>
+                      <label for="loginPassword">Password</label>
+                    </div>
+                  </div>
+                  <div class="row center-align">
+                    <button class="btn waves-effect waves-light orange" type="submit">Login</button>
+                  </div>
+                  <div id="loginError" class="red-text center-align" style="display:none;">
+                    Invalid username or password
+                  </div>
+                </form>
+              </div>
+              
+              <!-- Registration Form -->
+              <div id="register">
+                <h6 class="center-align">Create a New Account</h6>
+                <form id="registerForm" class="col s12">
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <input id="registerUsername" type="text" class="validate" required>
+                      <label for="registerUsername">Username</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <input id="registerEmail" type="email" class="validate" required>
+                      <label for="registerEmail">Email</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <input id="registerPassword" type="password" class="validate" required>
+                      <label for="registerPassword">Password</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <input id="confirmPassword" type="password" class="validate" required>
+                      <label for="confirmPassword">Confirm Password</label>
+                    </div>
+                  </div>
+                  <div class="row center-align">
+                    <button class="btn waves-effect waves-light blue" type="submit">Register</button>
+                  </div>
+                  <div id="registerError" class="red-text center-align" style="display:none;"></div>
+                  <div id="registerSuccess" class="green-text center-align" style="display:none;"></div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12 center-align grey-text">
+          <p>© 2025 Autoexaminer. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+      // Initialize Materialize tabs
+      document.addEventListener('DOMContentLoaded', function() {
+        var tabs = document.querySelectorAll('.tabs');
+        M.Tabs.init(tabs);
+      });
+
+      // Login Form Handler
+      document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var username = document.getElementById('loginUsername').value;
+        var password = document.getElementById('loginPassword').value;
+        
+        google.script.run
+          .withSuccessHandler(function(isValid) {
+            if (isValid) {
+              google.script.run.withSuccessHandler(function(html) {
+                document.open();
+                document.write(html);
+                document.close();
+                if (typeof M !== 'undefined') {
+                  M.AutoInit();
+                }
+              }).loadMainApp();
+            } else {
+              document.getElementById('loginError').style.display = 'block';
+            }
+          })
+          .validateLogin(username, password);
+      });
+
+      // Registration Form Handler
+      document.getElementById('registerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var username = document.getElementById('registerUsername').value;
+        var email = document.getElementById('registerEmail').value;
+        var password = document.getElementById('registerPassword').value;
+        var confirmPassword = document.getElementById('confirmPassword').value;
+        
+        var registerError = document.getElementById('registerError');
+        var registerSuccess = document.getElementById('registerSuccess');
+        
+        // Basic validation
+        if (password !== confirmPassword) {
+          registerError.textContent = "Passwords do not match";
+          registerError.style.display = 'block';
+          registerSuccess.style.display = 'none';
+          return;
+        }
+        
+        google.script.run
+          .withSuccessHandler(function(result) {
+            if (result.success) {
+              registerSuccess.textContent = result.message;
+              registerSuccess.style.display = 'block';
+              registerError.style.display = 'none';
+              // Optional: Clear form or switch to login tab
+            } else {
+              registerError.textContent = result.message;
+              registerError.style.display = 'block';
+              registerSuccess.style.display = 'none';
+            }
+          })
+          .registerUser(username, password, email);
+      });
+    </script>
+  </body>
+</html>
